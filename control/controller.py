@@ -1,18 +1,16 @@
 # controler.py
-
 """
 This is the gateway to the application. It is the only file that should be
 """
-
-
-# Para permitir pegarle a la API desde localhost:
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from control.users import users
 
 app = FastAPI()
-
-# Para permitir pegarle a la API desde localhost: (PREGUNTAR)
 origins = ["*"]
+
+app.include_router(users.router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -21,14 +19,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-# Route to handle user registration
-@app.post("/register/")
-def register():
-    """
-    Register a new user
-    """
-
-
-# Aca se llamaria a el endpoint de la API de usuarios
+# Despues cuando se cree snapmsg.py:
+URL_SNAPMSG = os.environ.get("URL_SNAPMSG")
+if URL_SNAPMSG is None:
+    print("You forgot to set URL_SNAPMSG!")

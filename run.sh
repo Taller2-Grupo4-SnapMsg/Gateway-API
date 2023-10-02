@@ -1,2 +1,2 @@
 docker build -t gateway .
-docker run -p 8000:8000 gateway
+docker run -e USERS_URL=$USERS_URL -p 8080:8080 gateway
