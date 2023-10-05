@@ -2,18 +2,15 @@
 """
 This is the users' micro service represented in the gateway.
 """
-import os
 import requests
-from fastapi import APIRouter, Header, Response
+from fastapi import APIRouter, Header
 from pydantic import BaseModel
+from control.utils import generate_response
+from control.utils import create_header_token
+from control.env import USERS_URL
 
 router = APIRouter()
 origins = ["*"]
-
-
-USERS_URL = os.environ.get("USERS_URL")
-if USERS_URL is None:
-    print("You forgot to set USERS_URL!")
 
 TIMEOUT = 20
 
@@ -56,9 +53,11 @@ def register(user_data: UserRegistration):
     }
     headers_request = {"accept": "application/json", "Content-Type": "application/json"}
     # call to user's API
-    return requests.post(
+    response = requests.post(
         USERS_URL + "/register", json=payload, headers=headers_request, timeout=TIMEOUT
-    ).json()
+    )
+
+    return generate_response(response)
 
 
 # Route to log in
@@ -73,25 +72,68 @@ def login(user_data: UserLogIn):
     response = requests.post(
         USERS_URL + "/login", json=payload, headers=headers_request, timeout=TIMEOUT
     )
-    response = Response(content=response.content, status_code=response.status_code)
-    return response
+
+    return generate_response(response)
 
 
-# Route to create a follow:
-@router.post("/follow/{email}")
-def create_follow(email: str, token: str = Header(...)):
+# Route for admin log in
+@router.post("/login_admin")
+def login_admin(user_data: UserLogIn):
     """
-    Create a follow
+    Log in an admin
     """
-    headers_request = {
-        "accept": "application/json",
-        "Content-Type": "application/json",
-        "token": token,
-    }
-    email = {"email_following": email}
+    payload = {"password": user_data.password, "email": user_data.email}
+    headers_request = {"accept": "application/json", "Content-Type": "application/json"}
     # call to user's API
     response = requests.post(
-        USERS_URL + "/follow", params=email, headers=headers_request, timeout=TIMEOUT
+        USERS_URL + "/login_admin",
+        json=payload,
+        headers=headers_request,
+        timeout=TIMEOUT,
     )
-    response = Response(content=response.content, status_code=response.status_code)
-    return response
+
+    return generate_response(response)
+
+
+# Route for admin registration
+@router.post("/register_admin")
+def register_admin(user_data: UserRegistration):
+    """
+    Register a new admin
+    """
+    payload = {
+        "password": user_data.password,
+        "email": user_data.email,
+        "name": user_data.name,
+        "last_name": user_data.last_name,
+        "username": user_data.username,
+        "date_of_birth": user_data.date_of_birth,
+    }
+    headers_request = {"accept": "application/json", "Content-Type": "application/json"}
+    # call to user's API
+    response = requests.post(
+        USERS_URL + "/register_admin",
+        json=payload,
+        headers=headers_request,
+        timeout=TIMEOUT,
+    )
+
+    return generate_response(response)
+
+
+# Route to get a user either by email or by username
+@router.get("/users/find")
+def get_user(email: str = None, username: str = None, token: str = Header(...)):
+    """
+    Get a user either by email or by username
+    """
+    headers_request = create_header_token(token)
+
+    url = USERS_URL + "/users/find"
+    if email:
+        url += f"?email={email}"
+    if username:
+        url += f"?username={username}"
+    # call to user's API
+    response = requests.get(url, headers=headers_request, timeout=TIMEOUT)
+    return generate_response(response)

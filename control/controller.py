@@ -2,15 +2,16 @@
 """
 This is the gateway to the application. It is the only file that should be
 """
-import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from control.users import users
+from control.users import followers
 
 app = FastAPI()
 origins = ["*"]
 
 app.include_router(users.router)
+app.include_router(followers.router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -19,7 +20,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-# Despues cuando se cree snapmsg.py:
-URL_SNAPMSG = os.environ.get("URL_SNAPMSG")
-if URL_SNAPMSG is None:
-    print("You forgot to set URL_SNAPMSG!")
