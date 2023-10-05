@@ -28,3 +28,27 @@ def create_header_token(token):
         "Content-Type": "application/json",
         "token": token,
     }
+
+
+def create_user_registration_payload(user_data):
+    """
+    Create a payload for user registration
+    """
+    return {
+        "password": user_data.password,
+        "email": user_data.email,
+        "name": user_data.name,
+        "last_name": user_data.last_name,
+        "username": user_data.username,
+        "date_of_birth": user_data.date_of_birth,
+    }
+
+
+def create_header_no_token():
+    """
+    Create a header with no token
+    """
+    return {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+    }

@@ -6,11 +6,15 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from control.users import users
 from control.users import followers
+from control.users import users_put
+from control.users import users_admin
 
 app = FastAPI()
 origins = ["*"]
 
 app.include_router(users.router)
+app.include_router(users_put.router)
+app.include_router(users_admin.router)
 app.include_router(followers.router)
 
 app.add_middleware(

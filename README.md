@@ -12,7 +12,7 @@ pre-commit install
 ```bash
 pre-commit run --all-files
 ```
-## Si no en cualquier commit de la CLI (Command Line Interface) te va a correr los hooks.
+## Si no, en cualquier commit de la CLI (Command Line Interface) te va a correr los hooks.
 ```bash
 git commit
 ```

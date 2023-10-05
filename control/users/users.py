@@ -4,9 +4,11 @@ This is the users' micro service represented in the gateway.
 """
 import requests
 from fastapi import APIRouter, Header
-from pydantic import BaseModel
+from control.models import UserRegistration, UserLogIn
 from control.utils import generate_response
 from control.utils import create_header_token
+from control.utils import create_user_registration_payload
+from control.utils import create_header_no_token
 from control.env import USERS_URL
 
 router = APIRouter()
@@ -15,46 +17,20 @@ origins = ["*"]
 TIMEOUT = 20
 
 
-class UserRegistration(BaseModel):
-    """
-    This class is a Pydantic model for the request body.
-    """
-
-    password: str
-    email: str
-    name: str
-    last_name: str
-    username: str
-    date_of_birth: str
-
-
-class UserLogIn(BaseModel):
-    """
-    This class is a Pydantic model for the request body.
-    """
-
-    email: str
-    password: str
-
-
 # Route to handle user registration
 @router.post("/register")
 def register(user_data: UserRegistration):
     """
     Register a new user
     """
-    payload = {
-        "password": user_data.password,
-        "email": user_data.email,
-        "name": user_data.name,
-        "last_name": user_data.last_name,
-        "username": user_data.username,
-        "date_of_birth": user_data.date_of_birth,
-    }
-    headers_request = {"accept": "application/json", "Content-Type": "application/json"}
+    # It's a registration here and on users_admin.py, so it's not a duplicate
+    # pylint: disable=R0801:
+    payload = create_user_registration_payload(user_data)
+    headers_request = create_header_no_token()
+    url = USERS_URL + "/register"
     # call to user's API
     response = requests.post(
-        USERS_URL + "/register", json=payload, headers=headers_request, timeout=TIMEOUT
+        url, json=payload, headers=headers_request, timeout=TIMEOUT
     )
 
     return generate_response(response)
@@ -66,56 +42,12 @@ def login(user_data: UserLogIn):
     """
     Log in a user
     """
+
     payload = {"password": user_data.password, "email": user_data.email}
-    headers_request = {"accept": "application/json", "Content-Type": "application/json"}
+    headers_request = create_header_no_token()
     # call to user's API
     response = requests.post(
         USERS_URL + "/login", json=payload, headers=headers_request, timeout=TIMEOUT
-    )
-
-    return generate_response(response)
-
-
-# Route for admin log in
-@router.post("/login_admin")
-def login_admin(user_data: UserLogIn):
-    """
-    Log in an admin
-    """
-    payload = {"password": user_data.password, "email": user_data.email}
-    headers_request = {"accept": "application/json", "Content-Type": "application/json"}
-    # call to user's API
-    response = requests.post(
-        USERS_URL + "/login_admin",
-        json=payload,
-        headers=headers_request,
-        timeout=TIMEOUT,
-    )
-
-    return generate_response(response)
-
-
-# Route for admin registration
-@router.post("/register_admin")
-def register_admin(user_data: UserRegistration):
-    """
-    Register a new admin
-    """
-    payload = {
-        "password": user_data.password,
-        "email": user_data.email,
-        "name": user_data.name,
-        "last_name": user_data.last_name,
-        "username": user_data.username,
-        "date_of_birth": user_data.date_of_birth,
-    }
-    headers_request = {"accept": "application/json", "Content-Type": "application/json"}
-    # call to user's API
-    response = requests.post(
-        USERS_URL + "/register_admin",
-        json=payload,
-        headers=headers_request,
-        timeout=TIMEOUT,
     )
 
     return generate_response(response)
@@ -136,4 +68,18 @@ def get_user(email: str = None, username: str = None, token: str = Header(...)):
         url += f"?username={username}"
     # call to user's API
     response = requests.get(url, headers=headers_request, timeout=TIMEOUT)
+    return generate_response(response)
+
+
+# Route to get a user's information by token
+@router.get("/get_user_by_token")
+def get_user_by_token(token: str = Header(...)):
+    """
+    Get a user's information by token
+    """
+    headers_request = create_header_token(token)
+    # call to user's API
+    response = requests.get(
+        USERS_URL + "/get_user_by_token", headers=headers_request, timeout=TIMEOUT
+    )
     return generate_response(response)
