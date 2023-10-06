@@ -43,6 +43,16 @@ def create_user_registration_payload(user_data):
         "date_of_birth": user_data.date_of_birth,
     }
 
+def create_post_payload(post_data):
+    """
+    Create a payload for post
+    """
+    return {
+        "user_id": post_data.user_id,
+        "content": post_data.content,
+        "image": post_data.image,
+    }
+
 
 def create_header_no_token():
     """
