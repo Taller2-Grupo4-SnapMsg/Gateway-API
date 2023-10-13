@@ -4,6 +4,8 @@ services:
     image: python:3.9
     container_name: gateway-api
     working_dir: /app
+    environment:
+      USERS_URL: https://loginback-lg51.onrender.com
     ports:
       - "8080:8080"
     command: bash -c "pip install --no-cache-dir -r requirements.txt && uvicorn control.controller:app --host 0.0.0.0 --port 8080"
