@@ -1,0 +1,11 @@
+version: '3'
+services:
+  gateway-api:
+    image: python:3.9
+    container_name: gateway-api
+    working_dir: /app
+    ports:
+      - "8080:8080"
+    command: bash -c "pip install --no-cache-dir -r requirements.txt && uvicorn control.controller:app --host 0.0.0.0 --port 8080"
+    volumes:
+      - .:/app

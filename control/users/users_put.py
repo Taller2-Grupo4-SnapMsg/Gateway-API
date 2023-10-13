@@ -8,7 +8,7 @@ from control.utils import generate_response
 from control.utils import create_header_token
 from control.env import USERS_URL
 
-router = APIRouter()
+router = APIRouter(tags=["users"])
 origins = ["*"]
 
 TIMEOUT = 20
