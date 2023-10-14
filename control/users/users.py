@@ -4,7 +4,7 @@ This is the users' micro service represented in the gateway.
 """
 from urllib.parse import quote
 import requests
-from fastapi import APIRouter, Header
+from fastapi import APIRouter, Header, HTTPException
 from control.models import UserRegistration, UserLogIn
 from control.utils import generate_response
 from control.utils import create_header_token
@@ -32,8 +32,12 @@ def register(user_data: UserRegistration):
     response = requests.post(
         url, json=payload, headers=headers_request, timeout=TIMEOUT
     )
-
-    return generate_response(response)
+    if response.status_code == 201:
+        data = response.json()
+        return data
+    raise HTTPException(
+        status_code=response.status_code, detail=response.json().get("detail")
+    )
 
 
 # Route to log in
