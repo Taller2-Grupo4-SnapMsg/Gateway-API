@@ -124,3 +124,33 @@ def change_location(new_location: str, token: str = Header(...)):
         url, params=new_location, headers=headers_request, timeout=TIMEOUT
     )
     return generate_response(response)
+
+
+@router.put("/users/interests")
+def change_interests(new_interests: str, token: str = Header(...)):
+    """
+    Update a user's interests
+    """
+    headers_request = create_header_token(token)
+    new_interests = {"new_interests": new_interests}
+    url = USERS_URL + "/users/interests"
+
+    response = requests.put(
+        url, params=new_interests, headers=headers_request, timeout=TIMEOUT
+    )
+    return generate_response(response)
+
+
+@router.put("/users/privacy")
+def change_user_privacy(is_public: bool, token: str = Header(...)):
+    """
+    Update a user's privacy
+    """
+    headers_request = create_header_token(token)
+    is_public = {"is_public": is_public}
+    url = USERS_URL + "/users/privacy"
+
+    response = requests.put(
+        url, params=is_public, headers=headers_request, timeout=TIMEOUT
+    )
+    return generate_response(response)

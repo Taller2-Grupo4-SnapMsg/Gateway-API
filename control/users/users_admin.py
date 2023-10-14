@@ -45,7 +45,7 @@ def login_admin(user_data: UserLogIn):
     """
     payload = {"password": user_data.password, "email": user_data.email}
     headers_request = create_header_no_token()
-    # call to user's API
+
     response = requests.post(
         USERS_URL + "/login_admin",
         json=payload,
@@ -104,19 +104,27 @@ def remove_admin(email: str, token: str = Header(...)):
     return generate_response(response)
 
 
-# Route to delete a user, this one can be used by the user itself
-@router.delete("/users/{email}")
-def delete_user(email: str, token: str = Header(...)):
+@router.get("/admin/find_users/{username}")
+def find_users(username: str, start: int, ammount: int, token: str = Header(...)):
     """
-    Delete a user, this one can be used by the user itself
+    Find users by username
     """
     headers_request = create_header_token(token)
-    params = {"email": email}
-    url = f"{USERS_URL}/users/{quote(params['email'])}"
+    params = {"username": username, "start": start, "ammount": ammount}
+    url = f"{USERS_URL}/admin/find_users/\
+        {quote(params['username'])}?start={params['start']}&ammount={params['ammount']}"
+    response = requests.get(url, headers=headers_request, timeout=TIMEOUT)
+    return generate_response(response)
 
-    response = requests.delete(
-        url, params=params, headers=headers_request, timeout=TIMEOUT
-    )
+
+@router.get("/admin/is_admin")
+def validate_admin_token(token: str = Header(...)):
+    """
+    Validate admin token
+    """
+    headers_request = create_header_token(token)
+    url = USERS_URL + "/admin/is_admin"
+    response = requests.get(url, headers=headers_request, timeout=TIMEOUT)
     return generate_response(response)
 
 
@@ -128,7 +136,7 @@ def get_all_users(token: str = Header(...)):
     """
     headers_request = create_header_token(token)
     url = USERS_URL + "/users"
-    # call to user's API
+
     response = requests.get(url, headers=headers_request, timeout=TIMEOUT)
 
     return generate_response(response)
@@ -142,7 +150,7 @@ def get_all_following(token: str = Header(...)):
     """
     headers_request = create_header_token(token)
     url = USERS_URL + "/following"
-    # call to user's API
+
     response = requests.get(url, headers=headers_request, timeout=TIMEOUT)
 
     return generate_response(response)
