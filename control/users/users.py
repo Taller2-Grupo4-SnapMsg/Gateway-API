@@ -147,8 +147,10 @@ def search_users_by_username(
     """
     headers_request = create_header_token(token)
     params = {"username": username, "offset": offset, "ammount": ammount}
-    url = f"{USERS_URL}/user/search/\
-        {quote(params['username'])}?offset={params['offset']}&ammount={params['ammount']}"
+    # pylint: disable=C0301
+    # We can't do anything about the length of the url, and we can't use \ to break the line
+    # Because it would break the url
+    url = f"{USERS_URL}/user/search/{quote(params['username'])}?offset={params['offset']}&ammount={params['ammount']}"
 
     response = requests.get(
         url, params=params, headers=headers_request, timeout=TIMEOUT
