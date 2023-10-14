@@ -57,7 +57,8 @@ def login_with_google(firebase_id_token: str = Header(...)):
     """
     Log in a user with Google
     """
-    headers_request = create_header_token(firebase_id_token)
+    headers_request = create_header_no_token()
+    headers_request["firebase-id-token"] = firebase_id_token
     response = requests.post(
         USERS_URL + "/login_with_google",
         headers=headers_request,
