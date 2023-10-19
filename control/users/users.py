@@ -4,7 +4,7 @@ This is the users' micro service represented in the gateway.
 """
 from urllib.parse import quote
 import requests
-from fastapi import APIRouter, Header, HTTPException
+from fastapi import APIRouter, Header, HTTPException, Query
 from control.models import UserRegistration, UserLogIn
 from control.utils import generate_response
 from control.utils import create_header_token
@@ -143,19 +143,22 @@ def get_user_by_token_with_id(token: str = Header(...)):
     return generate_response(response)
 
 
-@router.get("/user/search/{username}")
-def search_users_by_username(
-    username: str, offset: int, ammount: int, token: str = Header(...)
+@router.get("/user/search/{query}")
+def search_users(
+    query: str,
+    offset=Query(default=0, description="Offset of the search."),
+    ammount=Query(default=10, description="Ammount of users to return."),
+    token: str = Header(...),
 ):
     """
-    Get a user's information by token
+    Searches the users by username, name, or surname.
     """
     headers_request = create_header_token(token)
-    params = {"username": username, "offset": offset, "ammount": ammount}
+    params = {"query": query, "offset": int(offset), "ammount": int(ammount)}
     # pylint: disable=C0301
     # We can't do anything about the length of the url, and we can't use \ to break the line
     # Because it would break the url
-    url = f"{USERS_URL}/user/search/{quote(params['username'])}?offset={params['offset']}&ammount={params['ammount']}"
+    url = f"{USERS_URL}/user/search/{quote(params['query'])}?offset={params['offset']}&ammount={params['ammount']}"
 
     response = requests.get(
         url, params=params, headers=headers_request, timeout=TIMEOUT
