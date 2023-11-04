@@ -148,17 +148,21 @@ def search_users(
     query: str,
     offset=Query(default=0, description="Offset of the search."),
     ammount=Query(default=10, description="Ammount of users to return."),
+    in_followers: bool = Query(
+        False, title="in_followers", description="search in followers"
+    ),
+
     token: str = Header(...),
 ):
     """
     Searches the users by username, name, or surname.
     """
     headers_request = create_header_token(token)
-    params = {"query": query, "offset": int(offset), "ammount": int(ammount)}
+    params = {"query": query, "offset": int(offset), "ammount": int(ammount), "in_followers": in_followers}
     # pylint: disable=C0301
     # We can't do anything about the length of the url, and we can't use \ to break the line
     # Because it would break the url
-    url = f"{USERS_URL}/user/search/{quote(params['query'])}?offset={params['offset']}&ammount={params['ammount']}"
+    url = f"{USERS_URL}/user/search/{quote(params['query'])}?offset={params['offset']}&ammount={params['ammount']}&in_followers={params['in_followers']}"
 
     response = requests.get(
         url, params=params, headers=headers_request, timeout=TIMEOUT
