@@ -15,7 +15,7 @@ def generate_response(response):
         return data
 
     raise HTTPException(
-        status_code=response.status_code, detail=response.json().get("detail")
+        status_code=response.status_code, detail=response.json().get("message")
     )
 
 
