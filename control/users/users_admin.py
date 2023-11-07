@@ -6,12 +6,12 @@ Module for the endpoints of the users' API that are only available for admins
 from urllib.parse import quote
 import requests
 from fastapi import APIRouter, Header
-from control.models import UserLogIn, UserRegistration
+from control.models import UserLogIn
 from control.utils import generate_response
 from control.utils import create_header_token
-from control.utils import create_user_registration_payload
 from control.utils import create_header_no_token
 from control.env import USERS_URL
+from control.env import ADMINS_URL
 
 router = APIRouter(tags=["admin"])
 origins = ["*"]
@@ -21,14 +21,14 @@ TIMEOUT = 20
 
 # Route for admin registration
 @router.post("/register_admin")
-def register_admin(user_data: UserRegistration):
+def register_admin(user_data: UserLogIn):
     """
     Register a new admin
     """
-    payload = create_user_registration_payload(user_data)
+    payload = {"email": user_data.email, "password": user_data.password}
     headers_request = create_header_no_token()
     response = requests.post(
-        USERS_URL + "/register_admin",
+        ADMINS_URL + "/admin",
         json=payload,
         headers=headers_request,
         timeout=TIMEOUT,
@@ -47,12 +47,11 @@ def login_admin(user_data: UserLogIn):
     headers_request = create_header_no_token()
 
     response = requests.post(
-        USERS_URL + "/login_admin",
+        ADMINS_URL + "/admin/login",
         json=payload,
         headers=headers_request,
         timeout=TIMEOUT,
     )
-
     return generate_response(response)
 
 
@@ -88,22 +87,6 @@ def make_admin(email: str, token: str = Header(...)):
     return generate_response(response)
 
 
-# Route to making an admin a normal user
-@router.put("/users/{email}/remove_admin")
-def remove_admin(email: str, token: str = Header(...)):
-    """
-    Make an admin a normal user
-    """
-    headers_request = create_header_token(token)
-    params = {"email": email}
-    url = f"{USERS_URL}/users/{quote(params['email'])}/remove_admin"
-
-    response = requests.put(
-        url, params=params, headers=headers_request, timeout=TIMEOUT
-    )
-    return generate_response(response)
-
-
 @router.get("/admin/find_users/{username}")
 def find_users(username: str, start: int, ammount: int, token: str = Header(...)):
     """
@@ -125,7 +108,7 @@ def validate_admin_token(token: str = Header(...)):
     Validate admin token
     """
     headers_request = create_header_token(token)
-    url = USERS_URL + "/admin/is_admin"
+    url = ADMINS_URL + "/admin"
     response = requests.get(url, headers=headers_request, timeout=TIMEOUT)
     return generate_response(response)
 

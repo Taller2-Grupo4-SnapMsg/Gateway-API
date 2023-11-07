@@ -20,3 +20,5 @@ spec:
           env:
             - name: USERS_URL
               value: https://back-users-merok23.cloud.okteto.net
+            - name: ADMINS_URL
+              value: https://admins-backend-merok23.cloud.okteto.net/api/v1
