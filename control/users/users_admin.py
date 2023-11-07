@@ -12,6 +12,7 @@ from control.utils import create_header_token
 from control.utils import create_user_registration_payload
 from control.utils import create_header_no_token
 from control.env import USERS_URL
+from control.env import ADMINS_URL
 
 router = APIRouter(tags=["admin"])
 origins = ["*"]
@@ -47,12 +48,12 @@ def login_admin(user_data: UserLogIn):
     headers_request = create_header_no_token()
 
     response = requests.post(
-        USERS_URL + "/login_admin",
+        ADMINS_URL + "/admin/login",
         json=payload,
         headers=headers_request,
         timeout=TIMEOUT,
     )
-
+    print(response)
     return generate_response(response)
 
 

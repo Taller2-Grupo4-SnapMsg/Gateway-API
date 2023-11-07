@@ -6,6 +6,7 @@ services:
     working_dir: /app
     environment:
       USERS_URL: https://back-users-merok23.cloud.okteto.net
+      ADMINS_URL: https://admins-backend-merok23.cloud.okteto.net/api/v1
     ports:
       - "8080:8080"
     command: bash -c "pip install --no-cache-dir -r requirements.txt && uvicorn control.controller:app --host 0.0.0.0 --port 8080"

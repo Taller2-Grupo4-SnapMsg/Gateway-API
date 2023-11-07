@@ -12,3 +12,7 @@ if USERS_URL is None:
 URL_SNAPMSG = os.environ.get("URL_SNAPMSG")
 if URL_SNAPMSG is None:
     print("You forgot to set URL_SNAPMSG!")
+
+ADMINS_URL = os.environ.get("ADMINS_URL")
+if ADMINS_URL is None:
+    print("You forgot to set ADMINS_URL!")
