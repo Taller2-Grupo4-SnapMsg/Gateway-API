@@ -5,7 +5,7 @@ Module for the endpoints of the users' API that are only available for admins
 
 from urllib.parse import quote
 import requests
-from fastapi import APIRouter, Header
+from fastapi import APIRouter, Header, Query
 from control.models import UserLogIn
 from control.utils import generate_response
 from control.utils import create_header_token
@@ -115,12 +115,34 @@ def validate_admin_token(token: str = Header(...)):
 
 # Route to get all users
 @router.get("/users")
-def get_all_users(token: str = Header(...)):
+def get_all_users(
+    start: int = Query(default=0, description="Offset of the search."),
+    ammount: int = Query(default=10, description="Ammount of users to return."),
+    token: str = Header(...),
+):
     """
     Get all users
     """
     headers_request = create_header_token(token)
-    url = USERS_URL + "/users"
+    url = USERS_URL + "/users" + f"?start={start}&ammount={ammount}"
+
+    response = requests.get(url, headers=headers_request, timeout=TIMEOUT)
+
+    return generate_response(response)
+
+
+@router.get("/users/{query}")
+def get_users_by_query(
+    query: str,
+    start: int = Query(default=0, description="Offset of the search."),
+    ammount: int = Query(default=10, description="Ammount of users to return."),
+    token: str = Header(...),
+):
+    """
+    Get users by a query that searches for email, username, lastname, firstname
+    """
+    headers_request = create_header_token(token)
+    url = USERS_URL + "/users/" + query + f"?start={start}&ammount={ammount}"
 
     response = requests.get(url, headers=headers_request, timeout=TIMEOUT)
 
