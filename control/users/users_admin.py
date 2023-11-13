@@ -149,6 +149,23 @@ def get_users_by_query(
     return generate_response(response)
 
 
+# Route to get a user either by email or by username
+@router.get("/users/admin/find")
+def get_user(email: str = None, username: str = None, token: str = Header(...)):
+    """
+    Get a user either by email or by username
+    """
+    headers_request = create_header_token(token)
+
+    url = USERS_URL + "/users/admin/find"
+    if email:
+        url += f"?email={email}"
+    if username:
+        url += f"?username={username}"
+    response = requests.get(url, headers=headers_request, timeout=TIMEOUT)
+    return generate_response(response)
+
+
 # Route to get all following relations
 @router.get("/following")
 def get_all_following(token: str = Header(...)):

@@ -71,23 +71,6 @@ def login_with_google(firebase_id_token: str = Header(...)):
     return generate_response(response)
 
 
-# Route to get a user either by email or by username
-@router.get("/users/find")
-def get_user(email: str = None, username: str = None, token: str = Header(...)):
-    """
-    Get a user either by email or by username
-    """
-    headers_request = create_header_token(token)
-
-    url = USERS_URL + "/users/find"
-    if email:
-        url += f"?email={email}"
-    if username:
-        url += f"?username={username}"
-    response = requests.get(url, headers=headers_request, timeout=TIMEOUT)
-    return generate_response(response)
-
-
 @router.get("/users/interests")
 def get_interests(token: str = Header(...)):
     """
