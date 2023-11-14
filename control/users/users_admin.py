@@ -166,6 +166,20 @@ def get_user(email: str = None, username: str = None, token: str = Header(...)):
     return generate_response(response)
 
 
+@router.get("/users/admin/image")
+def get_image_from_path(firebase_path: str, token: str = Header(...)):
+    """
+    Translates a firebase_path into a valid url image that expires in 5 minutes.
+    """
+    headers_request = create_header_token(token)
+    url = USERS_URL + "/users/admin/image"
+    params = {"firebase_path": firebase_path}
+    response = requests.get(
+        url, params=params, headers=headers_request, timeout=TIMEOUT
+    )
+    return generate_response(response)
+
+
 # Route to get all following relations
 @router.get("/following")
 def get_all_following(token: str = Header(...)):
