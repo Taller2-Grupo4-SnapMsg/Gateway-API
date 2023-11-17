@@ -71,22 +71,6 @@ def block_user(email: str, blocked: bool, token: str = Header(...)):
     return generate_response(response)
 
 
-# Route to making a user an admin
-@router.put("/users/{email}/make_admin")
-def make_admin(email: str, token: str = Header(...)):
-    """
-    Make a user an admin
-    """
-    headers_request = create_header_token(token)
-    params = {"email": email}
-    url = f"{USERS_URL}/users/{quote(params['email'])}/make_admin"
-
-    response = requests.put(
-        url, params=params, headers=headers_request, timeout=TIMEOUT
-    )
-    return generate_response(response)
-
-
 @router.get("/admin/find_users/{username}")
 def find_users(username: str, start: int, ammount: int, token: str = Header(...)):
     """
