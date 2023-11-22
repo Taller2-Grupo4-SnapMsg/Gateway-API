@@ -5,7 +5,7 @@ Module for the endpoints of the users' API that are only available for admins
 
 from urllib.parse import quote
 import requests
-from fastapi import APIRouter, Header, Query
+from fastapi import APIRouter, Header, Query, HTTPException, status
 from control.models import UserLogIn
 from control.utils import generate_response
 from control.utils import create_header_token
@@ -174,5 +174,26 @@ def get_all_following(token: str = Header(...)):
     url = USERS_URL + "/following"
 
     response = requests.get(url, headers=headers_request, timeout=TIMEOUT)
+
+    return generate_response(response)
+
+
+@router.get("/service_status")
+def get_service_status(service: str = Query(...)):
+    """
+    Get the status of the service
+    """
+    if service == "users":
+        url = USERS_URL
+    elif service == "admins":
+        url = ADMINS_URL
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Service not found: " + service,
+        )
+
+    url += "/health"
+    response = requests.get(url, timeout=TIMEOUT)
 
     return generate_response(response)
