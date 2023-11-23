@@ -1,32 +1,31 @@
-services:
-  gateway-api:
-    apiVersion: apps/v1
-    kind: Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-api-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: gateway-api
+  template:
     metadata:
-      name: gateway-api-deployment
+      labels:
+        app: gateway-api
     spec:
-      replicas: 3
-      selector:
-        matchLabels:
-          app: gateway-api
-      template:
-        metadata:
-          labels:
-            app: gateway-api
-        spec:
-          containers:
-            - name: gateway-api
-              image: merok23/gateway-api:latest
-              ports:
-                - containerPort: 8080
-              env:
-                - name: USERS_URL
-                  value: https://back-users-merok23.cloud.okteto.net
-                - name: ADMINS_URL
-                  value: https://admins-backend-merok23.cloud.okteto.net/api/v1
-
-  gateway-api-service:
-    labels:
-      - app: gateway-api
+      containers:
+        - name: gateway-api
+          image: merok23/gateway-api:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: USERS_URL
+              value: https://back-users-merok23.cloud.okteto.net
+            - name: ADMINS_URL
+              value: https://admins-backend-merok23.cloud.okteto.net/api/v1
+  service:
+    name: gateway-api-service
     ports:
-      - 80:8080
+      - protocol: TCP
+        port: 80
+        targetPort: 8080
+    type: LoadBalancer
