@@ -27,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: user/app:latest
+          tags: merok23/gateway-api:latest
 
 #       - name: Install kubectl
 #         uses: azure/kubectl@v1
