@@ -27,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: merok23/gateway-api:latestt
+          tags: merok23/gateway-api:latest
 
       - name: checkout
         uses: actions/checkout@master

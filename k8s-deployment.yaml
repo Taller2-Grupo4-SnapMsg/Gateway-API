@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: gateway-api
-          image: merok23/gateway-api:latestt
+          image: merok23/gateway-api:latest
           ports:
             - containerPort: 8080
           env:
