@@ -7,7 +7,7 @@ on:
     #   - 'main'
 
 jobs:
-  docker:
+  docker-and-k8s:
     runs-on: ubuntu-latest
     steps:
       -
@@ -28,10 +28,7 @@ jobs:
         with:
           push: true
           tags: merok23/gateway-api:latest
-  k8s:
-    runs-on: ubuntu-latest
 
-    steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -40,19 +37,9 @@ jobs:
         with:
           kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
       
-      - name: Set up Okteto
-        uses: okteto/setup-okteto@v1
+      - name: Deploy to Kubernetes
+        uses: azure/k8s-deploy@v1
         with:
-          token: ${{ secrets.OKTETO_TOKEN }}
-          namespace: ${{ secrets.OKTETO_NAMESPACE }}
-      - name: Deploy to Okteto
-        uses: okteto/deploy-action@v1
-        with:
-          manifest: k8s-deployment.yaml
-          image: merok23/gateway-api:latest
-          registry-secret: dockerhub
-          force-pull: true
-          wait: true
-          timeout: 1200
-          namespace: ${{ secrets.OKTETO_NAMESPACE }}
-          
+          manifests: |
+            k8s-deployment.yaml
+            k8s-service.yaml
