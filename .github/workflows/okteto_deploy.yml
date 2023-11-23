@@ -29,17 +29,23 @@ jobs:
           push: true
           tags: merok23/gateway-api:latest
 
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up kubectl
-        uses: azure/k8s-set-context@v1
-        with:
-          kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
+      - name: checkout
+        uses: actions/checkout@master
       
-      - name: Deploy to Kubernetes
-        uses: azure/k8s-deploy@v1
+      - name: context
+        uses: okteto/context@latest
         with:
-          manifests: |
-            k8s-deployment.yaml
-            k8s-service.yaml
+          token: ${{ secrets.OKTETO_TOKEN }}
+      
+      - name: "Activate Namespace"
+        uses: okteto/namespace@latest
+        with:
+          namespace: merok23
+
+      - name: "Trigger the pipeline"
+        uses: okteto/pipeline@latest
+        with:
+          name: Gateway-API
+          timeout: 8m
+          skipIfExists: false
+          variables: "DB_HOST=mysql,CONFIG_PATH=/tmp/config.yaml"
