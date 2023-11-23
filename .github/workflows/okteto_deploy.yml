@@ -39,10 +39,20 @@ jobs:
         uses: azure/k8s-set-context@v1
         with:
           kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
-
-      - name: Apply Kubernetes Deployment
-        run: kubectl apply -f k8s-deployment.yaml
-
-      - name: Apply Kubernetes Service
-        run: kubectl apply -f k8s-service.yaml
-
+      
+      - name: Set up Okteto
+        uses: okteto/setup-okteto@v1
+        with:
+          token: ${{ secrets.OKTETO_TOKEN }}
+          namespace: ${{ secrets.OKTETO_NAMESPACE }}
+      - name: Deploy to Okteto
+        uses: okteto/deploy-action@v1
+        with:
+          manifest: k8s-deployment.yaml
+          image: merok23/gateway-api:latest
+          registry-secret: dockerhub
+          force-pull: true
+          wait: true
+          timeout: 1200
+          namespace: ${{ secrets.OKTETO_NAMESPACE }}
+          
