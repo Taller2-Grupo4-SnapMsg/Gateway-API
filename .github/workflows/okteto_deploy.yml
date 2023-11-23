@@ -1,0 +1,40 @@
+
+name: Docker Build and Deploy
+
+on:
+  push:
+    # branches:
+    #   - 'main'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: user/app:latest
+
+#       - name: Install kubectl
+#         uses: azure/kubectl@v1
+#         with:
+#           version: latest
+
+#       - name: Restart Okteto service
+#         run: |
+#           kubectl config set-context --current --namespace=your-namespace
+#           kubectl rollout restart deployment/your-deployment-name

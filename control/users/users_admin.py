@@ -186,7 +186,7 @@ def get_service_status(service: str = Query(...)):
     if service == "users":
         url = USERS_URL
     elif service == "admins":
-        url = ADMINS_URL
+        url = ADMINS_URL + "/admin"
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
