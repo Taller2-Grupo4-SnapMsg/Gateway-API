@@ -28,13 +28,24 @@ jobs:
         with:
           push: true
           tags: merok23/gateway-api:latest
+  okteto:
+    runs-on: ubuntu-latest
+    steps:
+        - name: checkout
+          uses: actions/checkout@master
+        - name: context
+          uses: okteto/context@latest
+          with:
+            token: ${{ secrets.OKTETO_TOKEN }}
+        - name: "Activate Namespace"
+          uses: okteto/namespace@latest
+          with:
+            namespace: merok23
+        - name: "Trigger the pipeline"
+          uses: okteto/pipeline@latest
+          with:
+            name: Gateway-API
+            timeout: 8m
+            skipIfExists: false
+            variables: "DB_HOST=mysql,CONFIG_PATH=/tmp/config.yaml"
 
-#       - name: Install kubectl
-#         uses: azure/kubectl@v1
-#         with:
-#           version: latest
-
-#       - name: Restart Okteto service
-#         run: |
-#           kubectl config set-context --current --namespace=your-namespace
-#           kubectl rollout restart deployment/your-deployment-name
