@@ -15,6 +15,7 @@ spec:
       containers:
         - name: gateway-api
           image: merok23/gateway-api:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:

@@ -41,7 +41,7 @@ jobs:
         uses: okteto/namespace@latest
         with:
           namespace: merok23
-
+      
       - name: "Trigger the pipeline"
         uses: okteto/pipeline@latest
         with:
