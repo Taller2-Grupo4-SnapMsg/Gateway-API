@@ -22,10 +22,16 @@ spec:
               value: https://back-users-merok23.cloud.okteto.net
             - name: ADMINS_URL
               value: https://admins-backend-merok23.cloud.okteto.net/api/v1
-  service:
-    name: gateway-api-service
-    ports:
-      - protocol: TCP
-        port: 80
-        targetPort: 8080
-    type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-api-service
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  selector:
+    app: gateway-api
+  type: LoadBalancer
