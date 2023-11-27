@@ -26,4 +26,4 @@ spec:
             - name: SNAPMSG_URL
               value: https://postsback.onrender.com
             - name: METRICS_URL
-              value: 
+              value: https://snapmsgs-metrics.onrender.com
