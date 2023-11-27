@@ -23,3 +23,7 @@ spec:
               value: https://back-users-merok23.cloud.okteto.net
             - name: ADMINS_URL
               value: https://admins-backend-merok23.cloud.okteto.net/api/v1
+            - name: SNAPMSG_URL
+              value: https://postsback.onrender.com
+            - name: METRICS_URL
+              value: 

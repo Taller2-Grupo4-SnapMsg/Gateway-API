@@ -12,6 +12,8 @@ from control.utils import create_header_token
 from control.utils import create_header_no_token
 from control.env import USERS_URL
 from control.env import ADMINS_URL
+from control.env import SNAPMSG_URL
+from control.env import METRICS_URL
 
 router = APIRouter(tags=["admin"])
 origins = ["*"]
@@ -187,6 +189,10 @@ def get_service_status(service: str = Query(...)):
         url = USERS_URL
     elif service == "admins":
         url = ADMINS_URL + "/admin"
+    elif service == "snapmsg":
+        url = SNAPMSG_URL + "/admin"
+    elif service == "metrics":
+        url = METRICS_URL + "/admin"
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
