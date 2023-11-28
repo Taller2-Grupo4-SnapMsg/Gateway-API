@@ -172,3 +172,39 @@ def search_users(
         url, params=params, headers=headers_request, timeout=TIMEOUT
     )
     return generate_response(response)
+
+@router.post("/user/biometric_token")
+def set_biometric_token(token: str = Header(...)):
+    """
+    Set the biometric token of the user
+    """
+    headers_request = create_header_token(token)
+
+    response = requests.post(
+        USERS_URL + "/user/biometric_token", headers=headers_request, timeout=TIMEOUT
+    )
+    return generate_response(response)
+
+@router.delete("/user/delete_biometric_token")
+def delete_biometric_token(token: str = Header(...)):
+    """
+    Delete the biometric token of the user
+    """
+    headers_request = create_header_token(token)
+
+    response = requests.delete(
+        USERS_URL + "/user/delete_biometric_token", headers=headers_request, timeout=TIMEOUT
+    )
+    return generate_response(response)
+
+@router.post("/login_with_biometrics")
+def login_with_biometrics(token: str = Header(...)):
+    """
+    Log in a user with biometrics
+    """
+    headers_request = create_header_token(token)
+
+    response = requests.post(
+        USERS_URL + "/login_with_biometrics", headers=headers_request, timeout=TIMEOUT
+    )
+    return generate_response(response)
