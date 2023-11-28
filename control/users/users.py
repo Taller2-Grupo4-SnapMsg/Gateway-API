@@ -151,14 +151,18 @@ def search_users(
     in_followers: bool = Query(
         False, title="in_followers", description="search in followers"
     ),
-
     token: str = Header(...),
 ):
     """
     Searches the users by username, name, or surname.
     """
     headers_request = create_header_token(token)
-    params = {"query": query, "offset": int(offset), "ammount": int(ammount), "in_followers": in_followers}
+    params = {
+        "query": query,
+        "offset": int(offset),
+        "ammount": int(ammount),
+        "in_followers": in_followers,
+    }
     # pylint: disable=C0301
     # We can't do anything about the length of the url, and we can't use \ to break the line
     # Because it would break the url
@@ -168,6 +172,7 @@ def search_users(
         url, params=params, headers=headers_request, timeout=TIMEOUT
     )
     return generate_response(response)
+
 
 @router.post("/user/biometric_token")
 def set_biometric_token(token: str = Header(...)):
@@ -181,6 +186,7 @@ def set_biometric_token(token: str = Header(...)):
     )
     return generate_response(response)
 
+
 @router.delete("/user/delete_biometric_token")
 def delete_biometric_token(token: str = Header(...)):
     """
@@ -189,9 +195,12 @@ def delete_biometric_token(token: str = Header(...)):
     headers_request = create_header_token(token)
 
     response = requests.delete(
-        USERS_URL + "/user/delete_biometric_token", headers=headers_request, timeout=TIMEOUT
+        USERS_URL + "/user/delete_biometric_token",
+        headers=headers_request,
+        timeout=TIMEOUT,
     )
     return generate_response(response)
+
 
 @router.post("/login_with_biometrics")
 def login_with_biometrics(token: str = Header(...)):
