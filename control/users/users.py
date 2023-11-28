@@ -8,6 +8,7 @@ from fastapi import APIRouter, Header, HTTPException, Query
 from control.models import UserRegistration, UserLogIn
 from control.utils import generate_response
 from control.utils import create_header_token
+from control.utils import create_header_tokens
 from control.utils import create_user_registration_payload
 from control.utils import create_header_no_token
 from control.env import USERS_URL
@@ -188,11 +189,13 @@ def set_biometric_token(token: str = Header(...)):
 
 
 @router.delete("/user/delete_biometric_token")
-def delete_biometric_token(token: str = Header(...)):
+def delete_biometric_token(
+    token: str = Header(...), biometric_token: str = Header(...)
+):
     """
     Delete the biometric token of the user
     """
-    headers_request = create_header_token(token)
+    headers_request = create_header_tokens(token, biometric_token)
 
     response = requests.delete(
         USERS_URL + "/user/delete_biometric_token",
@@ -203,13 +206,15 @@ def delete_biometric_token(token: str = Header(...)):
 
 
 @router.post("/login_with_biometrics")
-def login_with_biometrics(token: str = Header(...)):
+def login_with_biometrics(token: str = Header(...), biometric_token: str = Header(...)):
     """
     Log in a user with biometrics
     """
-    headers_request = create_header_token(token)
+    headers_request = create_header_tokens(token, biometric_token)
 
     response = requests.post(
-        USERS_URL + "/login_with_biometrics", headers=headers_request, timeout=TIMEOUT
+        USERS_URL + "/login_with_biometrics",
+        headers=headers_request,
+        timeout=TIMEOUT,
     )
     return generate_response(response)

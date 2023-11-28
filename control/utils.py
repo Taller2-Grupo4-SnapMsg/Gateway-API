@@ -30,6 +30,18 @@ def create_header_token(token):
     }
 
 
+def create_header_tokens(token, biometric_token):
+    """
+    Create a header with a token
+    """
+    return {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+        "token": token,
+        "biometric_token": biometric_token,
+    }
+
+
 def create_user_registration_payload(user_data):
     """
     Create a payload for user registration
