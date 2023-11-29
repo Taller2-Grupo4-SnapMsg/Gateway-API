@@ -3,17 +3,21 @@
 Module for utility functions
 """
 
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 
 
 def generate_response(response):
     """
     Generate a response from a given request return value
     """
-    if response.status_code == 200:
+    if response.status_code == status.HTTP_200_OK:
         data = response.json()
         return data
-
+    if response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Sorry, something went wrong, try again later",
+        )
     raise HTTPException(
         status_code=response.status_code, detail=response.json().get("detail")
     )
@@ -30,7 +34,18 @@ def create_header_token(token):
     }
 
 
-def create_header_tokens(token, biometric_token):
+def create_header_biometric_token(biometric_token):
+    """
+    Create a header with a token
+    """
+    return {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+        "biometric-token": biometric_token,
+    }
+
+
+def create_header_biometric_token_and_user_token(token, biometric_token):
     """
     Create a header with a token
     """
