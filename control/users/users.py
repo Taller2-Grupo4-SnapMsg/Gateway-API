@@ -214,7 +214,5 @@ def get_user_by_username_from_user(username: str, token: str = Header(...)):
     headers_request = create_header_token(token)
     url = f"{USERS_URL}/users/username/{username}"
 
-    response = requests.get(
-        url, headers=headers_request, timeout=TIMEOUT
-    )
+    response = requests.get(url, headers=headers_request, timeout=TIMEOUT)
     return generate_response(response)
