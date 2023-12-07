@@ -14,7 +14,6 @@ origins = ["*"]
 TIMEOUT = 20
 
 
-### QUEDA PROBAR
 @router.post("/reposts/{post_id}")
 def create_repost(post_id: int, token: str = Header(...)):
     """
@@ -28,7 +27,6 @@ def create_repost(post_id: int, token: str = Header(...)):
     return generate_response(response)
 
 
-### QUEDA PROBAR
 @router.delete("/reposts/from_post/{post_id}")
 def delete_respost_from_post(post_id: int, token: str = Header(...)):
     """
@@ -42,7 +40,6 @@ def delete_respost_from_post(post_id: int, token: str = Header(...)):
     return generate_response(response)
 
 
-### QUEDA PROBAR
 @router.delete("/reposts/{repost_id}")
 def delete_repost(repost_id: int, token: str = Header(...)):
     """

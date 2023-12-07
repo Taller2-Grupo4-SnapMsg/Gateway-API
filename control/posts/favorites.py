@@ -14,7 +14,6 @@ origins = ["*"]
 TIMEOUT = 20
 
 
-### QUEDA PROBAR
 @router.post("/favorites/{post_id}")
 def create_favorite(post_id: int, token: str = Header(...)):
     """
@@ -28,7 +27,6 @@ def create_favorite(post_id: int, token: str = Header(...)):
     return generate_response(response)
 
 
-### QUEDA PROBAR
 @router.delete("/favorites/{post_id}")
 def delete_favorite(post_id: int, token: str = Header(...)):
     """
@@ -42,7 +40,6 @@ def delete_favorite(post_id: int, token: str = Header(...)):
     return generate_response(response)
 
 
-### QUEDA PROBAR
 @router.get(
     "/favorites/profile/{user_visited_email}/oldest_date/{oldest_date_str}"
     "/amount/{amount}",

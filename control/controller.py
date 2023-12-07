@@ -9,7 +9,6 @@ from control.users import followers
 from control.users import users_put
 from control.users import users_admin
 from control.posts import posts
-from control.posts import posts_admin
 from control.posts import favorites
 from control.posts import likes
 from control.posts import notifications
@@ -24,7 +23,6 @@ app.include_router(users_put.router)
 app.include_router(users_admin.router)
 app.include_router(followers.router)
 app.include_router(posts.router)
-app.include_router(posts_admin.router)
 app.include_router(favorites.router)
 app.include_router(likes.router)
 app.include_router(notifications.router)

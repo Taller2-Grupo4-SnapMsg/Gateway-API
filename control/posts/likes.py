@@ -14,7 +14,6 @@ origins = ["*"]
 TIMEOUT = 20
 
 
-### QUEDA PROBAR
 @router.post("/likes/{post_id}")
 def create_like(post_id: int, token: str = Header(...)):
     """
@@ -28,7 +27,6 @@ def create_like(post_id: int, token: str = Header(...)):
     return generate_response(response)
 
 
-### QUEDA PROBAR
 @router.delete("/likes/{post_id}")
 def delete_like(post_id: int, token: str = Header(...)):
     """

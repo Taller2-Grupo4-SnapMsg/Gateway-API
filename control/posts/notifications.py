@@ -16,7 +16,6 @@ origins = ["*"]
 TIMEOUT = 20
 
 
-### QUEDA PROBAR
 @router.post("/notifications/save/{device_token}")
 def save_device_token(device_token: str, token: str = Header(...)):
     """
@@ -30,7 +29,6 @@ def save_device_token(device_token: str, token: str = Header(...)):
     return generate_response(response)
 
 
-### QUEDA PROBAR
 @router.delete("/notifications/{device_token}")
 def delete_device_token(device_token: str, token: str = Header(...)):
     """
@@ -44,7 +42,6 @@ def delete_device_token(device_token: str, token: str = Header(...)):
     return generate_response(response)
 
 
-### QUEDA PROBAR
 @router.post("/notifications/push", tags=["Notifications"])
 def api_send_notificacion(
     notificacion_request: NotificationRequest, token: str = Header(...)

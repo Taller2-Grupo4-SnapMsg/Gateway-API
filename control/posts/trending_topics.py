@@ -15,7 +15,6 @@ origins = ["*"]
 TIMEOUT = 20
 
 
-### QUEDA PROBAR
 @router.get("/trending_topics")
 def get_trending_topics(
     offset=Query(0, title="offset", description="offset for pagination"),
@@ -42,7 +41,6 @@ def get_trending_topics(
     return generate_response(response)
 
 
-### QUEDA PROBAR
 @router.get("/posts/trending_topic/{hashtag}")
 def get_posts_on_a_trending_topic(
     hashtag: str,

@@ -18,7 +18,6 @@ origins = ["*"]
 TIMEOUT = 20
 
 
-### QUEDA PROBAR
 @router.post("/posts")
 def create_post(post: PostCreateRequest, token: str = Header(...)):
     """
@@ -35,7 +34,6 @@ def create_post(post: PostCreateRequest, token: str = Header(...)):
     return generate_response(response)
 
 
-### QUEDA PROBAR
 @router.get(
     "/posts/profile/{user_visited_email}/oldest_date/{oldest_date_str}"
     "/amount/{amount}/only_reposts/",
@@ -52,14 +50,14 @@ def get_posts_and_reposts_from_user_visited(
     """
     headers_request = create_header_token(token)
     # pylint: disable=line-too-long
-    url = f"{SNAPMSG_URL}/posts/profile/{user_visited_email}/oldest_date/{oldest_date_str}/amount/{amount}/only_reposts/{only_reposts}"
-
-    response = requests.get(url, headers=headers_request, timeout=TIMEOUT)
-
+    url = f"{SNAPMSG_URL}/posts/profile/{user_visited_email}/oldest_date/{oldest_date_str}/amount/{amount}/only_reposts/"
+    params = {"only_reposts": only_reposts}
+    response = requests.get(
+        url, headers=headers_request, params=params, timeout=TIMEOUT
+    )
     return generate_response(response)
 
 
-### QUEDA PROBAR
 @router.get("/posts/{post_id}")
 def get_post_by_id(post_id: int, token: str = Header(...)):
     """
@@ -73,7 +71,6 @@ def get_post_by_id(post_id: int, token: str = Header(...)):
     return generate_response(response)
 
 
-### QUEDA PROBAR
 @router.get("/posts/profile/{user_visited_email}")
 def get_amount_posts_from_user_visited(
     user_visited_email: str,
@@ -90,7 +87,6 @@ def get_amount_posts_from_user_visited(
     return generate_response(response)
 
 
-### QUEDA PROBAR
 @router.get("/posts/feed/oldest_date/{oldest_date_str}/amount/{amount}")
 def get_feed(oldest_date_str: str, amount: int, token: str = Header(...)):
     """
@@ -104,7 +100,6 @@ def get_feed(oldest_date_str: str, amount: int, token: str = Header(...)):
     return generate_response(response)
 
 
-### QUEDA PROBAR
 @router.get("/posts/statistics/from_date/{from_date_str}/to_date/{to_date_str}")
 def get_statistics(from_date_str: str, to_date_str: str, token: str = Header(...)):
     """
@@ -118,7 +113,6 @@ def get_statistics(from_date_str: str, to_date_str: str, token: str = Header(...
     return generate_response(response)
 
 
-### QUEDA PROBAR
 @router.get("/posts/search/hashtags/{hashtags}")
 def get_posts_by_hashtags(
     hashtags: str,
@@ -145,7 +139,6 @@ def get_posts_by_hashtags(
     return generate_response(response)
 
 
-### QUEDA PROBAR
 @router.get("/posts/search/text/{text}")
 def get_posts_by_text(
     text: str,
@@ -172,7 +165,6 @@ def get_posts_by_text(
     return generate_response(response)
 
 
-### QUEDA PROBAR
 @router.put("/posts/{post_id}")
 def update_post(post_id: int, post_data: PostCreateRequest, token: str = Header(...)):
     """
@@ -182,14 +174,11 @@ def update_post(post_id: int, post_data: PostCreateRequest, token: str = Header(
     headers_request = create_header_token(token)
     url = f"{SNAPMSG_URL}/posts/{post_id}"
 
-    response = requests.put(
-        url, params=payload, headers=headers_request, timeout=TIMEOUT
-    )
-
+    response = requests.put(url, json=payload, headers=headers_request, timeout=TIMEOUT)
+    print(response)
     return generate_response(response)
 
 
-### QUEDA PROBAR
 @router.delete("/posts/{post_id}")
 def delete_post(post_id: int, token: str = Header(...)):
     """
