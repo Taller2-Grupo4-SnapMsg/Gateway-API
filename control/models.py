@@ -2,6 +2,7 @@
 """
 This module is for the Pydantic models.
 """
+from typing import List, Dict
 from pydantic import BaseModel
 
 
@@ -25,3 +26,25 @@ class UserLogIn(BaseModel):
 
     email: str
     password: str
+
+
+class PostCreateRequest(BaseModel):
+    """
+    This class is a Pydantic model for the request body.
+    """
+
+    content: str
+    image: str
+    hashtags: List[str]
+    mentions: List[str]
+
+
+class NotificationRequest(BaseModel):
+    """
+    This class is a Pydantic model for the request body.
+    """
+
+    user_emails_that_receive: List[str]
+    title: str
+    body: str
+    data: Dict[str, str]

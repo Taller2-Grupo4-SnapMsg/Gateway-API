@@ -71,6 +71,30 @@ def create_user_registration_payload(user_data):
     }
 
 
+def create_post_content_payload(post):
+    """
+    Create a payload for post content
+    """
+    return {
+        "content": post.content,
+        "image": post.image,
+        "hashtags": post.hashtags,
+        "mentions": post.mentions,
+    }
+
+
+def create_notification_payload(notification):
+    """
+    Create a payload for notification
+    """
+    return {
+        "user_emails_that_receive": notification.user_emails_that_receive,
+        "title": notification.title,
+        "body": notification.body,
+        "data": notification.data,
+    }
+
+
 def create_header_no_token():
     """
     Create a header with no token
