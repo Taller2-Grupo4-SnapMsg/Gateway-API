@@ -10,7 +10,7 @@ El gateway se encarga de comunicar todos los procesos de la aplicacion, por lo c
 
 # Pre-commit
 ```bash
-export PYTHONPATH=.$PYTHONPATH
+export PYTHONPATH=.
 ```
 ```bash
 pre-commit install
@@ -25,22 +25,13 @@ git commit
 ```
 Acordate que sin el pythonpath te van a aparecer errores de importacion.
 
-# Para poder conectar el gateway con los otros servicios, vas a tener que exportar las variables de entorno.
-Por ejemplo, si quiero conectarme con users:
-```bash
-export USERS_URL=https://loginback-lg51.onrender.com$USERS_URL
-```
-Si te olvidaste, te va a tirar un error de este estilo:
-```bash
-requests.exceptions.MissingSchema: Invalid URL '/login_admin': No scheme supplied. Perhaps you meant https:///login_admin?
-```
-
 # Para correr el proyecto
 (Con las variables de entorno exportadas)
 ```bash
 bash run.sh
 ```
 -> Esto va a correr el proyecto en el puerto `8080`
+Podes acceder al swagger en `localhost:8080/docs`
 
 # Para hacer un redeploy (Desde la compu de alejo al menos(?)):
 Si no tenes el kubectl configurado, okteto te lo configura con:
