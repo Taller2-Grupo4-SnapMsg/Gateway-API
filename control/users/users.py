@@ -204,3 +204,16 @@ def login_with_biometrics(biometric_token: str = Header(...)):
         timeout=TIMEOUT,
     )
     return generate_response(response)
+
+@router.get("/users/username/{username}")
+def get_user_by_username(username: str, token: str = Header(...)):
+    """
+    Get a user either by email or by username
+    """
+    headers_request = create_header_token(token)
+    url = f"{USERS_URL}/users/{username}"
+
+    response = requests.get(
+        url, headers=headers_request, timeout=TIMEOUT
+    )
+    return generate_response(response)
