@@ -1,6 +1,13 @@
 # Gateway-API
 API que esta en el medio del resto de las apis, y hace checkeos de verificacion y se encarga de no exponer endpoints que no se desean que sean publicos.
 
+La arquitectura de microservicios es la siguiente:
+![Arquitectura](Arquitectura_Microservicios.png)
+
+El gateway se encarga de comunicar todos los procesos de la aplicacion, por lo cual es bastante importante, y por eso esta deployado en un cluster de kubernetes con tres replicas.
+
+# Instrucciones Tecnicas:
+
 # Pre-commit
 ```bash
 export PYTHONPATH=.$PYTHONPATH
