@@ -6,7 +6,7 @@ services:
     working_dir: /app
     environment:
       USERS_URL: https://back-users-merok23.cloud.okteto.net
-      ADMINS_URL: https://admins-backend-merok23.cloud.okteto.net/api/v1
+      ADMINS_URL: https://admins-45ja.onrender.com/api/v1
       SNAPMSG_URL: https://postsback.onrender.com
       METRICS_URL: https://snapmsgs-metrics.onrender.com
     ports:
