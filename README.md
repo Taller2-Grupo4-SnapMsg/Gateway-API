@@ -25,16 +25,6 @@ git commit
 ```
 Acordate que sin el pythonpath te van a aparecer errores de importacion.
 
-# Para poder conectar el gateway con los otros servicios, vas a tener que exportar las variables de entorno.
-Por ejemplo, si quiero conectarme con users:
-```bash
-export USERS_URL=https://loginback-lg51.onrender.com$USERS_URL
-```
-Si te olvidaste, te va a tirar un error de este estilo:
-```bash
-requests.exceptions.MissingSchema: Invalid URL '/login_admin': No scheme supplied. Perhaps you meant https:///login_admin?
-```
-
 # Para correr el proyecto
 (Con las variables de entorno exportadas)
 ```bash
