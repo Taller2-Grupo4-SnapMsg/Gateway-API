@@ -5,6 +5,8 @@ Module for utility functions
 
 from fastapi import HTTPException, status
 
+TIMEOUT = 20
+
 
 def generate_response(response):
     """

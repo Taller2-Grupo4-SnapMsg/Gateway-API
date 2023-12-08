@@ -4,16 +4,26 @@ This is the gateway to the application. It is the only file that should be
 """
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from control.users import users
-from control.users import followers
-from control.users import users_put
-from control.users import users_admin
-from control.posts import posts
-from control.posts import favorites
-from control.posts import likes
-from control.posts import notifications
-from control.posts import reposts
-from control.posts import trending_topics
+from control.users import (
+    users,
+    users_put,
+    users_admin,
+    followers,
+)
+from control.posts import (
+    posts,
+    favorites,
+    likes,
+    reposts,
+    notifications,
+    trending_topics,
+)
+from control.metrics import (
+    block,
+    geo_zones,
+    login,
+    registration,
+)
 
 app = FastAPI()
 origins = ["*"]
@@ -28,6 +38,10 @@ app.include_router(likes.router)
 app.include_router(notifications.router)
 app.include_router(reposts.router)
 app.include_router(trending_topics.router)
+app.include_router(block.router)
+app.include_router(geo_zones.router)
+app.include_router(login.router)
+app.include_router(registration.router)
 
 app.add_middleware(
     CORSMiddleware,
